@@ -13,6 +13,8 @@ object TestDeployApp {
 
     val spark = SparkSession.builder()
       .appName("Test Deploy App")
+      // method 1
+      .config("spark.executor.memory", "1g")
       .getOrCreate()
 
     import spark.implicits._
@@ -28,6 +30,9 @@ object TestDeployApp {
     )
       .where(($"Major_Genre" === "Comedy") and ($"IMDB_Rating" > 6.5))
       .orderBy($"Rating".desc_nulls_last)
+
+    // method 2
+    spark.conf.set("spark.executor.memory", "1g") // warning - not all configurations available
 
     goodComediesDF.show()
 
